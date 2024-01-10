@@ -10,6 +10,9 @@ COPY . /app
 # 安装项目依赖
 RUN pip install --no-cache-dir -r requirements.txt
 
+# 安装Gunicorn
+RUN pip install gunicorn
+
 # 暴露端口，使得Flask应用可以被访问
 EXPOSE 2096
 
@@ -17,4 +20,5 @@ EXPOSE 2096
 ENV FLASK_APP=app.py
 
 # 当容器启动时，运行Flask应用
-CMD ["flask", "run", "--host=0.0.0.0", "--port=2096"]
+# CMD ["flask", "run", "--host=0.0.0.0", "--port=2096"]
+CMD ["gunicorn", "-b", "0.0.0.0:2096", "app:app"]
