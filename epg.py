@@ -109,10 +109,10 @@ def update_epg(xml_file):
             os.unlink(index_file)
             return _sum, index_file_new
         else:
-            # 删除所有旧的epg_index.json文件
-            for file in os.listdir('EPG_DATA'):
-                if file.startswith('epg_index_') and file.endswith('.json'):
-                    os.remove(f'EPG_DATA/{file}')
+            # 删除所有旧的epg_index.json文件（不用删除，后继用定时任务删除过期的文件，包括各个频道的epg文件）
+            # for file in os.listdir('EPG_DATA'):
+            #     if file.startswith('epg_index_') and file.endswith('.json'):
+            #         os.remove(f'EPG_DATA/{file}')
             os.rename(index_file, index_file_new)
             return _sum, index_file_new  # 返回checksum和文件名，表示已经生成了新的epg_index.json，需要通知客户端更新
 
