@@ -1,9 +1,31 @@
 import os
+import time
+
 import requests
 from flask import Flask, send_from_directory
 from epg import EPG_URL, update_epg
+import threading
+import schedule
 
 app = Flask(__name__)
+
+last_checksum = None
+update_lock = threading.Lock()
+
+
+@app.route('/update')
+def update_with_lock():
+    with update_lock:
+        return update()
+
+
+@app.route('/checksum')
+def checksum():
+    global last_checksum
+    if last_checksum:
+        return last_checksum
+    else:
+        return 'error'
 
 
 @app.route('/EPG_DATA/<path:path>')
@@ -11,8 +33,8 @@ def send_epg_data(path):
     return send_from_directory('EPG_DATA', path)
 
 
-@app.route('/update')
 def update():
+    global last_checksum
     # 从 URL 下载 EPG 文件
     EPG_FILE = 'EPG_DATA/brazil.xml'
     try:
@@ -24,6 +46,7 @@ def update():
         with open(EPG_FILE, 'wb') as f:
             f.write(r.content)
         checksum, index = update_epg(EPG_FILE)
+        last_checksum = checksum if checksum else last_checksum
 
         # 返回json格式的校验和和epg_index文件名
         return {'code': 0, 'message': 'ok', 'data': {'checksum': checksum, 'index_file': index}}
@@ -31,5 +54,14 @@ def update():
         return {'code': 1, 'message': str(e), 'data': {}}
 
 
+def run_scheduler():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+
 if __name__ == '__main__':
+    schedule.every(10).minutes.do(update_with_lock)
+    scheduler_thread = threading.Thread(target=run_scheduler)
+    scheduler_thread.start()
     app.run(host='0.0.0.0', port=2096)

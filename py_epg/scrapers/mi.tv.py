@@ -37,11 +37,12 @@ class MiTV(EpgScraper):
     def __init__(self, proxy=None, user_agent=None):
         super().__init__(name=__name__, proxy=proxy, user_agent=user_agent)
         self._site_id = "mi.tv"
-        self._base_url = 'https://mi.tv/br/programacao'
+        self._base_url = 'https://mi.tv/br/canais'
         self._page_encoding = 'utf-8'
         self._chan_id_tpl = Template('$chan_id.' + self._site_id)
         self._day_url_tpl = Template(
-            self._base_url + '/napi/tvmusor/$chan_site_id/$date')
+            self._base_url + '/$chan_site_id/$date')
+        # https://mi.tv/br/canais/cultura/2024-1-13
         self._tz_utc = tz.tzutc()
         self._tz_local = tz.tzlocal()
 
@@ -56,7 +57,7 @@ class MiTV(EpgScraper):
         channel_id = self._chan_id_tpl.substitute(chan_id=chan_site_id).upper()
         channel_logo = soup.select_one('img.channelheaderlink')
         channel_logo_src = self._base_url + \
-            channel_logo.attrs['src'] if channel_logo else None
+                           channel_logo.attrs['src'] if channel_logo else None
         return Channel(
             id=channel_id,
             display_name=[DisplayName(content=[name])],
