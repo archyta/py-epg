@@ -16,9 +16,11 @@ def update():
     # 从 URL 下载 EPG 文件
     EPG_FILE = 'EPG_DATA/brazil.xml'
     try:
-        os.unlink(EPG_FILE)  # 删除旧的EPG文件
-        r = requests.get(EPG_URL)
+        if os.path.exists(EPG_FILE):
+            os.unlink(EPG_FILE)  # 删除旧的EPG文件
         os.makedirs(os.path.dirname(EPG_FILE), exist_ok=True)
+        print(f'从 {EPG_URL} 下载 EPG 文件到 {EPG_FILE}')
+        r = requests.get(EPG_URL)
         with open(EPG_FILE, 'wb') as f:
             f.write(r.content)
         checksum, index = update_epg(EPG_FILE)
