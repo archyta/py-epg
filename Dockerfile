@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # 安装项目依赖
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # 暴露端口，使得Flask应用可以被访问
 EXPOSE 2096
