@@ -73,7 +73,7 @@ Your contributions are welcome! Setup your dev environment as described below. [
 2. Run:
     ```sh
    # docker run -it --rm -v $(pwd)/py_epg.xml:/app/py_epg.xml my_epg
-   docker run -d -p 2096:2096 -v $(pwd)/EPG_DATA:/app/EPG_DATA my_epg --name epg
+   docker run -d -p 2096:2096 -v $(pwd)/EPG_DATA:/app/EPG_DATA --name epg my_epg
     ```
 
 ## License
