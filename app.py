@@ -19,13 +19,17 @@ def update_with_lock():
         return update()
 
 
+@app.route('/')
 @app.route('/checksum')
 def checksum():
     global last_checksum
-    if last_checksum:
-        return last_checksum
-    else:
-        return 'error'
+    if not last_checksum:
+        if os.path.exists('EPG_DATA/checksum.txt'):
+            with open('EPG_DATA/checksum.txt', 'r') as f:
+                last_checksum = f.read()
+        else:
+            update_with_lock()
+    return f'{last_checksum}<br/><a href="/EPG_DATA/epg_index_{last_checksum}.json">epg_index_{last_checksum}.json</a>'
 
 
 @app.route('/EPG_DATA/<path:path>')
