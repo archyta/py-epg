@@ -9,3 +9,4 @@ py-xmltv ~= 1.0.8
 roman==4.1
 tqdm==4.66.1
 flask==3.0.0
+schedule==1.2.1
