@@ -64,6 +64,18 @@ Your contributions are welcome! Setup your dev environment as described below. [
       poetry run epg -c py_epg.xml
       ```
 
+## Deploy Docker image
+
+1. Build image:
+    ```sh
+    docker build -t my_epg .
+    ```
+2. Run:
+    ```sh
+   # docker run -it --rm -v $(pwd)/py_epg.xml:/py_epg.xml my_epg
+   docker run -p 2096:2096 -v $(pwd)/EPG_DATA:/EPG_DATA my_epg
+    ```
+
 ## License
 
 Copyright 2021. Released under the MIT license.

@@ -5,6 +5,15 @@ from collections import defaultdict
 from datetime import datetime
 import json
 import requests
+import gzip
+import shutil
+
+
+def compress_to_gzip(input_file):
+    with open(input_file, 'rb') as f_in:
+        with gzip.open(input_file + '.gz', 'wb') as f_out:
+            shutil.copyfileobj(f_in, f_out)
+
 
 EPG_INDEX_NO_CHANGE = 0
 EPG_INDEX_CHANGED = 1
@@ -72,6 +81,10 @@ def update_epg(xml_file):
             # 重命名文件，加上checksum
             file_name_new = f'EPG_DATA/{date}/{channel}_{date}_{_sum}.xml'
             os.rename(file_name, file_name_new)
+            # 压缩成gzip格式
+            compress_to_gzip(file_name_new)
+            os.unlink(file_name_new)
+            file_name_new = f'{file_name_new}.gz'
             date = date.strftime("%Y-%m-%d")
             _epg_index = {'channel': channel, 'date': date, 'checksum': _sum, 'file': file_name_new}
             # 将文件名和checksum添加到epg_index中
@@ -93,7 +106,7 @@ def update_epg(xml_file):
         # 重命名文件，加上checksum
         index_file_new = f'EPG_DATA/epg_index_{_sum}.json'
         if os.path.exists(index_file_new):  # 如果已经存在，说明没有变化，不用更新
-            os.remove(index_file)
+            os.unlink(index_file)
             return _sum, index_file_new
         else:
             # 删除所有旧的epg_index.json文件

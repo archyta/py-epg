@@ -1,4 +1,4 @@
-lxml==5.0.0
+lxml==5.1.0
 requests==2.31.0
 beautifulsoup4==4.12.2
 python-xmltv ~= 1.4.3
@@ -8,3 +8,4 @@ PyYAML ~= 6.0
 py-xmltv ~= 1.0.8
 roman==4.1
 tqdm==4.66.1
+flask==3.0.0
