@@ -13,6 +13,7 @@ last_checksum = None
 update_lock = threading.Lock()
 
 
+@app.route('/update')
 @app.route('/api/update')
 def update_with_lock():
     with update_lock:
@@ -20,6 +21,7 @@ def update_with_lock():
 
 
 @app.route('/')
+@app.route('/checksum')
 @app.route('/api/checksum')
 def checksum():
     global last_checksum
