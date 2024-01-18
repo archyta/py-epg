@@ -52,6 +52,7 @@ class MusorTvMobile(EpgScraper):
         today_str = date.today().strftime("%Y.%m.%d")
         url = self._day_url_tpl.substitute(
             chan_site_id=chan_site_id, date=today_str)
+        print(url)
         soup = self._get_soup(url)
         channel_id = self._chan_id_tpl.substitute(chan_id=chan_site_id).upper()
         channel_logo = soup.select_one('img.channelheaderlink')
@@ -64,8 +65,10 @@ class MusorTvMobile(EpgScraper):
 
     def fetch_programs(self, channel: Channel, channel_site_id: str, fetch_date: date) -> List[Programme]:
         date_str = fetch_date.strftime("%Y.%m.%d")
-        channel_daily_progs_page = self._get_soup(self._day_url_tpl.substitute(
-            chan_site_id=channel_site_id, date=date_str))
+        url = self._day_url_tpl.substitute(
+            chan_site_id=channel_site_id, date=date_str)
+        print(url)
+        channel_daily_progs_page = self._get_soup(url)
         programs_selector = 'section[itemscope]'
         programs = []
         for prg in channel_daily_progs_page.select(programs_selector):

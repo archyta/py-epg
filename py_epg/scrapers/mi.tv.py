@@ -56,8 +56,7 @@ class MiTV(EpgScraper):
         soup = self._get_soup(url)
         channel_id = self._chan_id_tpl.substitute(chan_id=chan_site_id).upper()
         channel_logo = soup.select_one('img.channelheaderlink')
-        channel_logo_src = self._base_url + \
-                           channel_logo.attrs['src'] if channel_logo else None
+        channel_logo_src = self._base_url + channel_logo.attrs['src'] if channel_logo else None
         return Channel(
             id=channel_id,
             display_name=[DisplayName(content=[name])],
