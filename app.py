@@ -20,6 +20,7 @@ update_lock = threading.Lock()
 @app.route('/update')
 @app.route('/api/update')
 def update_with_lock():
+    start_scheduler()
     with update_lock:
         return update()
 
@@ -69,12 +70,22 @@ def update():
 def run_scheduler():
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(5)
+
+
+scheduler_thread = None
+
+
+@app.route('/api/start')
+def start_scheduler():
+    global scheduler_thread
+    if not scheduler_thread:
+        schedule.every(10).minutes.do(update_with_lock)
+        logger.info('启动定时任务')
+        scheduler_thread = threading.Thread(target=run_scheduler)
+        scheduler_thread.start()
 
 
 if __name__ == '__main__':
-    schedule.every(10).minutes.do(update_with_lock)
-    logger.info('启动定时任务')
-    scheduler_thread = threading.Thread(target=run_scheduler)
-    scheduler_thread.start()
+    start_scheduler()
     app.run(host='0.0.0.0', port=2096)
