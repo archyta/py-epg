@@ -1,5 +1,5 @@
 # 使用官方的Python镜像作为基础镜像
-FROM python:3.12-alpine3.17
+FROM python:3.12-bullseye
 
 # 设置工作目录
 WORKDIR /app
