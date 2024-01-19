@@ -73,7 +73,7 @@ def run_scheduler():
 
 
 if __name__ == '__main__':
-    schedule.every(1).minutes.do(update_with_lock)
+    schedule.every(10).minutes.do(update_with_lock)
     logger.info('启动定时任务')
     scheduler_thread = threading.Thread(target=run_scheduler)
     scheduler_thread.start()
