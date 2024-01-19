@@ -6,6 +6,10 @@ from flask import Flask, send_from_directory
 from epg import EPG_URL, update_epg
 import threading
 import schedule
+import logging.config
+
+logging.config.fileConfig('logging.ini')
+logger = logging.getLogger('app')
 
 app = Flask(__name__)
 
@@ -27,9 +31,11 @@ def checksum():
     global last_checksum
     if not last_checksum:
         if os.path.exists('EPG_DATA/checksum.txt'):
+            logger.debug('checksum.txt exists, read checksum from it')
             with open('EPG_DATA/checksum.txt', 'r') as f:
                 last_checksum = f.read()
         else:
+            logger.debug('epg checksum.txt not exists, update epg index')
             update_with_lock()
     return f'{last_checksum}<br/><a href="/EPG_DATA/epg_index_{last_checksum}.json">epg_index_{last_checksum}.json</a>'
 
@@ -47,12 +53,12 @@ def update():
         if os.path.exists(EPG_FILE):
             os.unlink(EPG_FILE)  # 删除旧的EPG文件
         os.makedirs(os.path.dirname(EPG_FILE), exist_ok=True)
-        print(f'从 {EPG_URL} 下载 EPG 文件到 {EPG_FILE}')
+        logger.info(f'从 {EPG_URL} 下载 EPG 文件到 {EPG_FILE}')
         r = requests.get(EPG_URL)
         with open(EPG_FILE, 'wb') as f:
             f.write(r.content)
-        checksum, index = update_epg(EPG_FILE)
-        last_checksum = checksum if checksum else last_checksum
+        _checksum, index = update_epg(EPG_FILE)
+        last_checksum = _checksum if _checksum else last_checksum
 
         # 返回json格式的校验和和epg_index文件名
         return {'code': 0, 'message': 'ok', 'data': {'checksum': checksum, 'index_file': index}}
@@ -67,7 +73,8 @@ def run_scheduler():
 
 
 if __name__ == '__main__':
-    schedule.every(10).minutes.do(update_with_lock)
+    schedule.every(1).minutes.do(update_with_lock)
+    logger.info('启动定时任务')
     scheduler_thread = threading.Thread(target=run_scheduler)
     scheduler_thread.start()
     app.run(host='0.0.0.0', port=2096)
