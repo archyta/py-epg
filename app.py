@@ -62,7 +62,7 @@ def update():
         last_checksum = _checksum if _checksum else last_checksum
 
         # 返回json格式的校验和和epg_index文件名
-        return {'code': 0, 'message': 'ok', 'data': {'checksum': checksum, 'index_file': index}}
+        return {'code': 0, 'message': 'ok', 'data': {'checksum': last_checksum, 'index_file': index}}
     except Exception as e:
         return {'code': 1, 'message': str(e), 'data': {}}
 
