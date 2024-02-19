@@ -1,0 +1,11 @@
+version: '3'
+services:
+  epg:
+    container_name: epg
+    hostname: epg
+    image: lanyue/epg
+    volumes:
+      - ./EPG_DATA:/app/EPG_DATA
+      - ./logs:/app/logs
+    ports:
+      - "2096:8080"

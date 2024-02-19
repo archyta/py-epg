@@ -28,6 +28,7 @@
     ```
 2. Create configuration: py_epg.xml
     - Add all your channels (see [sample config](https://github.com/szab100/py-epg/blob/main/py_epg.xml)).
+    - See more [configuration detail from webgrabplus](http://www.webgrabplus.com/documentation/configuration/howto)
     - Make sure there is a corresponding site scraper implementation in [py_epg/scrapers](https://github.com/szab100/py-epg/tree/main/py_epg/scrapers) for each channels ('site' attribute).
 3. Run:
     ```sh

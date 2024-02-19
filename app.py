@@ -7,6 +7,7 @@ from epg import EPG_URL, update_epg
 import threading
 import schedule
 import logging.config
+from loguru import logger
 
 logging.config.fileConfig('logging.ini')
 logger = logging.getLogger('app')
