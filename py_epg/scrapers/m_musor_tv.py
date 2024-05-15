@@ -208,3 +208,12 @@ class MusorTvMobile(EpgScraper):
     def _get_soup(self, url) -> BeautifulSoup:
         page = self._http.get(url)
         return BeautifulSoup(page.text, "html.parser")
+
+
+if __name__ == '__main__':
+    scraper = MusorTvMobile()
+    channel = scraper.fetch_channel('AMC', 'AMC')
+    today = date.today()
+    programs = scraper.fetch_programs(channel, 'AMC', today)
+    for p in programs:
+        print(p)

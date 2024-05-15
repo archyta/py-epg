@@ -11,3 +11,5 @@ tqdm==4.66.1
 flask==3.0.0
 schedule==1.2.1
 loguru==0.7.2
+pendulum==3.0.0
+

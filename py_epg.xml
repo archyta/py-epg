@@ -13,5 +13,5 @@
   <channel update="i" site="m.musor.tv" site_id="AMC" xmltv_id="AMC.MUSOR.TV">AMC (HD)</channel>
   <channel update="i" site="m.musor.tv" site_id="PARAMOUNT" xmltv_id="PARAMOUNT.MUSOR.TV">Paramount Channel (HD)</channel>
   <channel update="i" site="m.musor.tv" site_id="FILMCAFE" xmltv_id="FILMCAFE.MUSOR.TV">Film Café (HD)</channel>
-  <channel update="i" site="m.musor.tv" site_id="FILM4" xmltv_id="FILM4.MUSOR.TV">Film 4</channel>
+  <channel update="i" site="mi.tv" site_id="record" xmltv_id="record.mi.tv">Record TV</channel>
 </settings>
